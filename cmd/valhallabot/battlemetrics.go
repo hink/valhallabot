@@ -6,18 +6,38 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func GetValhallaStatus(s *discordgo.Session, m *discordgo.MessageCreate) {
-	msg := ""
-	server, err := bm.Server(1155175)
-	if err != nil {
-		msg = "Server Error"
-	} else {
-		poppedMsg := "Get in there and help pop!"
-		if server.Attributes.Players >= 40 {
-			poppedMsg = "We're popped boys!"
-		}
-		msg = fmt.Sprintf("There are currently %d players in Squad on Valhalla. %s", server.Attributes.Players, poppedMsg)
+func getServersStatus(s *discordgo.Session, m *discordgo.MessageCreate) {
+	GetSquadValhallaStatus(s, m)
+	GetPostScriptumValhallaStatus(s,m)
+}
+
+func GetSquadValhallaStatus(s *discordgo.Session, m *discordgo.MessageCreate) {
+	msg := "Server error retrieving Squad server details"
+	playerCount, err := getServerPlayerCount(1155175)
+	if err == nil {
+		// NO ERROR
+		msg = fmt.Sprintf("There are currently %d players in Squad on Valhalla.", playerCount)
 	}
 
 	s.ChannelMessageSend(m.ChannelID, msg)
+}
+
+func GetPostScriptumValhallaStatus(s *discordgo.Session, m *discordgo.MessageCreate) {
+	msg := "Server error retrieving PostScriptum server details"
+	playerCount, err := getServerPlayerCount(1155175)
+	if err == nil {
+		// NO ERROR
+		msg = fmt.Sprintf("There are currently %d players in PostScriptum on Valhalla.", playerCount)
+	}
+
+	s.ChannelMessageSend(m.ChannelID, msg)
+}
+
+func getServerPlayerCount(serverID int) (int, error) {
+	server, err := bm.Server(serverID)
+	if err != nil {
+		return 0, err
+	}
+
+	return server.Attributes.Players, nil
 }
