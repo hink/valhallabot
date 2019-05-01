@@ -24,7 +24,7 @@ func GetSquadValhallaStatus(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func GetPostScriptumValhallaStatus(s *discordgo.Session, m *discordgo.MessageCreate) {
 	msg := "Server error retrieving PostScriptum server details"
-	playerCount, err := getServerPlayerCount(1155175)
+	playerCount, err := getServerPlayerCount(3392315)
 	if err == nil {
 		// NO ERROR
 		msg = fmt.Sprintf("There are currently %d players in PostScriptum on Valhalla.", playerCount)
